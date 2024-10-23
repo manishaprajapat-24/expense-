@@ -61,6 +61,4 @@ Future Improvements
     Enable user authentication to save expenses across devices.
     Support multiple currencies.
 
-License
 
-This project is licensed under the MIT License.
