@@ -82,13 +82,18 @@ function updateExpenseTable() {
     dateInput.value = "";
 }
 
- function editExpense(index) {
-    const expense = expenses[index];
-    categorySelect.value = expense.category;
-    amountInput.value = expense.amount;
-    dateInput.value = expense.date;
-    editingIndex = index;  
-    addButton.textContent = 'Update';  
+function editExpense(index) {
+     if (index >= 0 && index < expenses.length) {
+         const expense = expenses[index];
+
+         categorySelect.value = expense.category;  
+        amountInput.value = expense.amount;     
+        dateInput.value = expense.date;          
+
+         editingIndex = index;
+    } else {
+        console.error("Invalid index:", index);
+    }
 }
 
  function deleteExpense(index) {
@@ -158,5 +163,4 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
     });
 }
 
-// Initial render
-updateExpenseTable();
+ updateExpenseTable();
