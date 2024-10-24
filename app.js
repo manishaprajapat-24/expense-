@@ -44,8 +44,8 @@ function sortExpensesByDate() {
     resetInputs();
 });
 
- function updateExpenseTable() {
-    totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
+function updateExpenseTable() {
+     const totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
     totalAmountDisplay.textContent = totalAmount.toFixed(2);
     
      expenseTableBody.innerHTML = "";
@@ -61,7 +61,7 @@ function sortExpensesByDate() {
         editButton.classList.add('edit-btn');
         editButton.addEventListener('click', () => editExpense(index));
 
-        const deleteButton = document.createElement('button');
+         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.classList.add('delete-btn');
         deleteButton.addEventListener('click', () => deleteExpense(index));
@@ -70,6 +70,7 @@ function sortExpensesByDate() {
         row.insertCell(4).appendChild(deleteButton);
     });
 }
+
 
  function saveExpensesToLocalStorage() {
     localStorage.setItem('expenses', JSON.stringify(expenses));
