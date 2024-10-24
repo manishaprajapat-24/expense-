@@ -13,12 +13,14 @@ const endDateInput = document.getElementById('end-date-input');
 const filterButton = document.getElementById('filter-btn');
 const removeFilterButton = document.getElementById('remove-filter-btn');
 
- addButton.addEventListener('click', handleAddExpense);
+// Initialize event listeners
+addButton.addEventListener('click', handleAddExpense);
 sortByDateButton.addEventListener('click', sortExpensesByDate);
 filterButton.addEventListener('click', handleFilterExpenses);
 removeFilterButton.addEventListener('click', removeFilters);
 
- function handleAddExpense() {
+// Function to handle adding or updating expenses
+function handleAddExpense() {
     const category = categorySelect.value;
     const amount = parseFloat(amountInput.value);
     const date = dateInput.value;
@@ -41,18 +43,21 @@ removeFilterButton.addEventListener('click', removeFilters);
     resetInputs();
 }
 
- function updateTotalAmount() {
+// Function to update and display total amount
+function updateTotalAmount() {
     const totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
     totalAmountDisplay.textContent = `Total: $${totalAmount.toFixed(2)}`;
 }
 
- function sortExpensesByDate() {
+// Sort expenses by date
+function sortExpensesByDate() {
     expenses.sort((a, b) => new Date(a.date) - new Date(b.date));
     saveExpensesToLocalStorage();
     updateExpenseTable();
 }
 
- function updateExpenseTable(filteredExpenses = expenses) {
+// Update the expense table and total amount
+function updateExpenseTable(filteredExpenses = expenses) {
     expenseTableBody.innerHTML = "";
 
     filteredExpenses.forEach((expense, index) => {
@@ -68,10 +73,11 @@ removeFilterButton.addEventListener('click', removeFilters);
         row.insertCell(4).appendChild(deleteButton);
     });
 
-    updateTotalAmount();   
+    updateTotalAmount();  // Call here to update total amount based on the current expenses
 }
 
- function createButton(text, onClick) {
+// Helper function to create buttons
+function createButton(text, onClick) {
     const button = document.createElement('button');
     button.textContent = text;
     button.classList.add(text.toLowerCase() + '-btn');
@@ -79,17 +85,20 @@ removeFilterButton.addEventListener('click', removeFilters);
     return button;
 }
 
- function saveExpensesToLocalStorage() {
+// Save expenses to local storage
+function saveExpensesToLocalStorage() {
     localStorage.setItem('expenses', JSON.stringify(expenses));
 }
 
- function resetInputs() {
+// Reset input fields
+function resetInputs() {
     categorySelect.value = "Grocery";  
     amountInput.value = "";
     dateInput.value = "";
 }
 
- function editExpense(index) {
+// Edit expense
+function editExpense(index) {
     if (index >= 0 && index < expenses.length) {
         const expense = expenses[index];
 
@@ -98,17 +107,19 @@ removeFilterButton.addEventListener('click', removeFilters);
         dateInput.value = expense.date;          
 
         editingIndex = index;
-        addButton.textContent = 'Update';  
+        addButton.textContent = 'Update'; // Change button text for editing
     }
 }
 
- function deleteExpense(index) {
+// Delete expense
+function deleteExpense(index) {
     expenses.splice(index, 1);
     saveExpensesToLocalStorage();
     updateExpenseTable();
 }
 
- function handleFilterExpenses() {
+// Handle filtering expenses based on date range
+function handleFilterExpenses() {
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
 
@@ -125,10 +136,12 @@ removeFilterButton.addEventListener('click', removeFilters);
     updateExpenseTable(filteredExpenses);
 }
 
- function removeFilters() {
-    updateExpenseTable();
+// Remove filters and display all expenses
+function removeFilters() {
     startDateInput.value = '';  
     endDateInput.value = '';
+    updateExpenseTable();  // Reset to show all expenses
 }
 
- updateExpenseTable();
+// Initial update of the expense table
+updateExpenseTable();
