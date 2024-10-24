@@ -10,13 +10,20 @@ const dateInput = document.getElementById('date-input');
 const expenseTableBody = document.getElementById('expense-table-body');
 const totalAmountDisplay = document.getElementById('total-amount');
 const addButton = document.getElementById('add-btn');
-const sortByDateButton = document.getElementById('sort-by-date-btn'); // Sort by Date button
+const sortByDateButton = document.getElementById('sort-by-date-btn');
 
-// Function to add or update an expense
-addButton.addEventListener('click', () => {
-    const category = categorySelect.value;
-    const amount = parseFloat(amountInput.value);
-    const date = dateInput.value;
+addButton.addEventListener('click', function() {
+    // Add or update an expense
+});
+
+sortByDateButton.addEventListener('click', function() {
+    // Sort expenses by date
+});
+
+function updateTotalAmount(amount) {
+    totalAmountDisplay.textContent = amount;
+}
+
 
     // Input validation
     if (!category || isNaN(amount) || amount <= 0 || !date) {
