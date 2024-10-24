@@ -13,16 +13,25 @@ const addButton = document.getElementById('add-btn');
 const sortByDateButton = document.getElementById('sort-by-date-btn');
 
 addButton.addEventListener('click', function() {
-    // Add or update an expense
+    // Example usage: Adding an expense and updating the total amount
+    let amount = 100; // Replace with actual logic to get expense amount
+    updateTotalAmount(amount);
 });
 
 sortByDateButton.addEventListener('click', function() {
-    // Sort expenses by date
+    // Example usage: Sorting expenses by date
+    sortExpensesByDate();
 });
 
 function updateTotalAmount(amount) {
-    totalAmountDisplay.textContent = amount;
+    totalAmountDisplay.textContent = `Total: $${amount}`;
 }
+
+function sortExpensesByDate() {
+    // Add logic for sorting expenses by date
+    console.log('Sorting expenses by date...');
+}
+
 
 
     // Input validation
