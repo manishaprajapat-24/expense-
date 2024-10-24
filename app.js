@@ -1,5 +1,4 @@
 let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-let totalAmount = 0;
 let editingIndex = null;  
 
 const categorySelect = document.getElementById('category-select');
@@ -14,12 +13,17 @@ const endDateInput = document.getElementById('end-date-input');
 const filterButton = document.getElementById('filter-btn');
 const removeFilterButton = document.getElementById('remove-filter-btn');
 
- addButton.addEventListener('click', function() {
+ addButton.addEventListener('click', handleAddExpense);
+sortByDateButton.addEventListener('click', sortExpensesByDate);
+filterButton.addEventListener('click', handleFilterExpenses);
+removeFilterButton.addEventListener('click', removeFilters);
+
+ function handleAddExpense() {
     const category = categorySelect.value;
     const amount = parseFloat(amountInput.value);
     const date = dateInput.value;
 
-     if (!category || isNaN(amount) || amount <= 0 || !date) {
+    if (!category || isNaN(amount) || amount <= 0 || !date) {
         alert("Please fill all fields with valid data.");
         return;
     }
@@ -35,27 +39,20 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
     saveExpensesToLocalStorage();
     updateExpenseTable();
     resetInputs();
-});
-
- sortByDateButton.addEventListener('click', function() {
-    sortExpensesByDate();
-});
+}
 
  function updateTotalAmount() {
-    totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
+    const totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0);
     totalAmountDisplay.textContent = `Total: $${totalAmount.toFixed(2)}`;
 }
 
  function sortExpensesByDate() {
     expenses.sort((a, b) => new Date(a.date) - new Date(b.date));
-    saveExpensesToLocalStorage();  
+    saveExpensesToLocalStorage();
     updateExpenseTable();
 }
 
  function updateExpenseTable(filteredExpenses = expenses) {
-    totalAmount = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
-    totalAmountDisplay.textContent = totalAmount.toFixed(2);
-    
     expenseTableBody.innerHTML = "";
 
     filteredExpenses.forEach((expense, index) => {
@@ -64,19 +61,22 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
         row.insertCell(1).textContent = expense.amount.toFixed(2);
         row.insertCell(2).textContent = expense.date;
 
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.classList.add('edit-btn');
-        editButton.addEventListener('click', () => editExpense(index));
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('delete-btn');
-        deleteButton.addEventListener('click', () => deleteExpense(index));
+        const editButton = createButton('Edit', () => editExpense(index));
+        const deleteButton = createButton('Delete', () => deleteExpense(index));
 
         row.insertCell(3).appendChild(editButton);
         row.insertCell(4).appendChild(deleteButton);
     });
+
+    updateTotalAmount();   
+}
+
+ function createButton(text, onClick) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.classList.add(text.toLowerCase() + '-btn');
+    button.addEventListener('click', onClick);
+    return button;
 }
 
  function saveExpensesToLocalStorage() {
@@ -98,9 +98,7 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
         dateInput.value = expense.date;          
 
         editingIndex = index;
-        addButton.textContent = 'Update'; 
-    } else {
-        console.error("Invalid index:", index);
+        addButton.textContent = 'Update';  
     }
 }
 
@@ -110,7 +108,7 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
     updateExpenseTable();
 }
 
- filterButton.addEventListener('click', () => {
+ function handleFilterExpenses() {
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
 
@@ -124,13 +122,13 @@ const removeFilterButton = document.getElementById('remove-filter-btn');
         return expenseDate >= startDate && expenseDate <= endDate;
     });
 
-    updateExpenseTable(filteredExpenses);  
-});
+    updateExpenseTable(filteredExpenses);
+}
 
- removeFilterButton.addEventListener('click', () => {
-    updateExpenseTable();  
+ function removeFilters() {
+    updateExpenseTable();
     startDateInput.value = '';  
     endDateInput.value = '';
-});
+}
 
  updateExpenseTable();
